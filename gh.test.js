@@ -1,36 +1,37 @@
-const { findAvailableSeance, selectSeat, isButtonDisabled } = require("./custom-commands");
+const { findAvailableSeat, selectSeat, isButtonDisabled, gotoNewTab, bookSeat } = require("./custom-commands");
 
 let page;
 
-beforeEach(async () => {
+/*beforeAll(async () => {
   page = await browser.newPage();
   await page.goto('http://qamid.tmweb.ru/client/index.php');
-});
-
-afterEach(() => {
-  page.close();
-});
+  await bookSeat(page);
+  await page.close()
+}, 10000);*/
 
 describe('Cinema tests', () => {
 
+  beforeEach(async () => {
+    page = await browser.newPage();
+    await page.goto('http://qamid.tmweb.ru/client/index.php');
+  }, 10000);
+  
+  afterEach(() => {
+    page.close();
+  }, 50000);
+
   test('Book common seat', async() =>{
-    await findAvailableSeance(page, 0);
-    await page.waitForNavigation();
-    await selectSeat(page, 0);
+    await findAvailableSeat(page);
     await isButtonDisabled(page, false);
-  }, 10000)
+  }, 20000)
 
   test('Book vip seat', async() =>{
-    await findAvailableSeance(page, 0);
-    await page.waitForNavigation();
-    await selectSeat(page, 0, 'vip');
+    await findAvailableSeat(page, 'vip');
     await isButtonDisabled(page, false);
-  }, 10000), 
+  }, 30000), 
 
   test('Book taken seat', async() =>{
-    await findAvailableSeance(page, 0);
-    await page.waitForNavigation();
-    await selectSeat(page, 6, 'taken');
+    await findAvailableSeat(page, 'taken');
     await isButtonDisabled(page, true);
-  }, 10000)
-});
+  }, 20000)
+}, 50000);
