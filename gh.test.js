@@ -2,12 +2,12 @@ const { findAvailableSeat, selectSeat, isButtonDisabled, gotoNewTab, bookSeat } 
 
 let page;
 
-/*beforeAll(async () => {
+beforeAll(async () => {
   page = await browser.newPage();
   await page.goto('http://qamid.tmweb.ru/client/index.php');
   await bookSeat(page);
   await page.close()
-}, 10000);*/
+}, 10000);
 
 describe('Cinema tests', () => {
 
