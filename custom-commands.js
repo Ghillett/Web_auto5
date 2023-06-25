@@ -9,7 +9,7 @@ async function findAvailableSeat (page, value = 'common', number = 0){
         }catch{
             await page.goBack();
             try{
-            await findAvailableSeat(page, value, ++number);
+                await findAvailableSeat(page, value, ++number);
             }catch{
                 await gotoNewTab(page);
                 await findAvailableSeat(page, value, 0);
@@ -47,16 +47,13 @@ async function bookSeat(page){
     let buttons = await page.$$('.movie-seances__time:not(.acceptin-button-disabled)');
     await buttons[0].click();
     await page.waitForSelector('.buying-scheme__row');
-    let seat;
-    seat = await page.$('.buying-scheme__chair_standart:not(.buying-scheme__chair_taken)');
+    let seat = await page.$('.buying-scheme__chair_standart:not(.buying-scheme__chair_taken)');
     await seat.click();
-    let button; 
     await page.waitForSelector('.acceptin-button');
-    button = await page.$('.acceptin-button');
-    button.click();
-    let secondButton;
+    let button = await page.$('.acceptin-button');
+    await button.click();
     await page.waitForSelector('.ticket__check-title');
-    secondButton = await page.$('.acceptin-button');
+    let secondButton = await page.$('.acceptin-button');
     await secondButton.click();
     await page.goBack();
 }

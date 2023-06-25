@@ -7,7 +7,7 @@ beforeAll(async () => {
   await page.goto('http://qamid.tmweb.ru/client/index.php');
   await bookSeat(page);
   await page.close()
-}, 10000);
+}, 15000);
 
 describe('Cinema tests', () => {
 
