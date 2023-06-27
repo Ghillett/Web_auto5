@@ -17,19 +17,19 @@ After(async function () {
     }
 });
 
-  Given('there is a taken seat in the first available seance', async function(){
+  Given('there is a taken seat in the first available seance', {timeout: 15000}, async function(){
     bookSeat(this.page);
   })
 
-  Given('user is on {string} page', async function(string){
+  Given('user is on {string} page', {timeout: 15000}, async function(string){
     return await this.page.goto('http://qamid.tmweb.ru/client/index.php');
   });
 
-  When('user selects {string} seat for available seance', async function(string){
+  When('user selects {string} seat for available seance', {timeout: 15000}, async function(string){
     return await findAvailableSeat(this.page, string);
   });
 
-  Then('book button should be {string}', async function(string){
+  Then('book button should be {string}', {timeout: 15000}, async function(string){
     this.page.waitForSelector('.acceptin-button');
     let bookButtonDisabled = await this.page.$eval('.acceptin-button', el => el.disabled);
     if(string == 'active'){

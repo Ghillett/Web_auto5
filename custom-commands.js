@@ -1,32 +1,32 @@
 async function findAvailableSeat (page, value = 'common', number = 0){
     await page.waitForSelector('.movie-seances__time');
     let buttons = await page.$$('.movie-seances__time:not(.acceptin-button-disabled)');
-        await page.waitForSelector('.movie-seances__time');
-        await buttons[number].click();
+    await page.waitForSelector('.movie-seances__time');
+    await buttons[number].click();
 
+    try{
+        await selectSeat(page, value);
+    }catch{
+        await page.goBack();
         try{
-            await selectSeat(page, value);
+            await findAvailableSeat(page, value, ++number);
         }catch{
-            await page.goBack();
-            try{
-                await findAvailableSeat(page, value, ++number);
-            }catch{
-                await gotoNewTab(page);
-                await findAvailableSeat(page, value, 0);
-            }
+            await gotoNewTab(page);
+            await findAvailableSeat(page, value, 0);
         }
+    }
 }
 
 async function selectSeat(page, value = 'common'){
     await page.waitForSelector('.buying-scheme__row');
     let seat;
 
-    if(value === 'common' && await page.$('.buying-scheme__chair_standart:not(.buying-scheme__chair_taken)', {timeout: 1000})){
-        seat = await page.$('.buying-scheme__chair_standart:not(.buying-scheme__chair_taken)');
-    }else if(value === 'vip' && await page.$('.buying-scheme__row .buying-scheme__chair_vip:not(.buying-scheme__chair_taken)', {timeout: 1000})){
-        seat = await page.$('.buying-scheme__row .buying-scheme__chair_vip:not(.buying-scheme__chair_taken)');
-    }else if(value === 'taken' && await page.$('.buying-scheme__chair_taken', {timeout: 1000})){
-        seat = await page.$('.buying-scheme__chair_taken');
+    if(value === 'common'){
+        seat = await page.$('.buying-scheme__chair_standart:not(.buying-scheme__chair_taken)', {timeout: 1000});
+    }else if(value === 'vip'){
+        seat = await page.$('.buying-scheme__row .buying-scheme__chair_vip:not(.buying-scheme__chair_taken)', {timeout: 1000});
+    }else if(value === 'taken'){
+        seat = await page.$('.buying-scheme__chair_taken', {timeout: 1000});
     }
     await seat.click();
 }
@@ -49,7 +49,6 @@ async function bookSeat(page){
     await page.waitForSelector('.buying-scheme__row');
     let seat = await page.$('.buying-scheme__chair_standart:not(.buying-scheme__chair_taken)');
     await seat.click();
-    await page.waitForSelector('.acceptin-button');
     let button = await page.$('.acceptin-button');
     await button.click();
     await page.waitForSelector('.ticket__check-title');
